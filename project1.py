@@ -18,34 +18,46 @@ soup = BeautifulSoup(response.content, "html.parser")
 #    links.append(a["href"])
 
 # Scraper le titre du livre
-titles = []
 title = soup.find("article", class_="product_page")
 for article in title:
-    titles = article.find("h1")
-    print(titles)
+    x = article.find("h1")
+    if article.find("h1") and article.find("h1") != -1:
+        titles = x
+        print(titles)
 
 # Scraper les informations (UPC, prix, stock ...)
 info = []
 info = soup.findAll("td")
-print(info)
+#print(f"INFO {variable} ")
 
 # Scraper la description du livre
 
-descriptions = []
-description = soup.find("article", class_="product_page")
+description = soup.findAll("article", class_="product_page")
 for desc in description:
-    description = desc.find("p", h2=True)
-    print(description)
+    description = desc.findAll("p")
+#    print(description)
 
-#if response.status_code -- 200:
-#    else:
-#        print("erreur de connexion")
+# Scraper la categorie du livre
+
+categorie = soup.findAll("a")
+
+# Scraper l'image du livre
+
+image = soup.findAll("img")
 
 book = {
-        "product_type": info[1],
-        "price_excl_tax": info[2],
-        "price_incl_tax": info[3],
-        "number_available": info[5],
-        "number_review": info[6],
+        "product_page_url": url,
+        "product_type": info[1].text,
+        "price_excl_tax": info[2].text,
+        "price_incl_tax": info[3].text,
+        "number_available": info[5].text,
+        "number_review": info[6].text,
+        "title": titles.text,
+        "description": description[3].text,
+        "categorie": categorie[3].text,
+        "image": image[0],
 }
 print(book)
+
+#for link in soup.find_all('a'):
+    #print(link.get('href'))
